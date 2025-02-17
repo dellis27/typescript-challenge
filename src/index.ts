@@ -39,3 +39,5 @@ const cli = new Cli(vehicles);
 
 // start the cli
 cli.startCli();
+ 
+export const exportedCar = car1;
