@@ -324,6 +324,7 @@ class Cli {
             'Turn left',
             'Reverse',
             'Select or create another vehicle',
+            'Tow',
             'Exit',
           ],
         },
@@ -386,10 +387,27 @@ class Cli {
               this.vehicles[i].reverse();
             }
           }
-        }
+        } else if (answers.action === 'Tow'){
+          const theVehicle = this.vehicles;
+
+          if (theVehicle instanceof Truck){
+             this.findVehicleToTow();
+             return;
+          } else {
+            return console.log(`Only a truck can tow!`)
+          }
+        } else if (answers.action === 'Wheelie') {
+          const theWheelicle = this.vehicles;
+          if (theWheelicle instanceof Motorbike){
+            
+
+          }
+
+          
+      
         // TODO: add statements to perform the tow action only if the selected vehicle is a truck. Call the findVehicleToTow method to find a vehicle to tow and pass the selected truck as an argument. After calling the findVehicleToTow method, you will need to return to avoid instantly calling the performActions method again since findVehicleToTow is asynchronous.
         // TODO: add statements to perform the wheelie action only if the selected vehicle is a motorbike
-        else if (answers.action === 'Select or create another vehicle') {
+        } else if (answers.action === 'Select or create another vehicle') {
           // start the cli to return to the initial prompt if the user wants to select or create another vehicle
           this.startCli();
           return;
