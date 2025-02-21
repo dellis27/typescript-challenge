@@ -4,6 +4,7 @@ import Truck from "./Truck.js";
 import Car from "./Car.js";
 import Motorbike from "./Motorbike.js";
 import Wheel from "./Wheel.js";
+import { resourceUsage } from "process";
 
 // define the Cli class
 class Cli {
@@ -276,13 +277,18 @@ class Cli {
   // method to find a vehicle to tow
   // TODO: add a parameter to accept a truck object
   findVehicleToTow(): void {
-    inquirer
+    const tower = this.vehicles.find((vehicles)=> vehicles.vin === this.selectedVehicleVin);
+    if (!(tower instanceof Truck)){
+      console.log('Only a Truck can tow')
+    }
+    
+    const answers = inquirer
       .prompt([
         {
           type: 'list',
           name: 'vehicleToTow',
           message: 'Select a vehicle to tow',
-          choices: this.vehicles.map((vehicle) => {
+          choices: this.vehicles.map ((vehicle) => {
             return {
               name: `${vehicle.vin} -- ${vehicle.make} ${vehicle.model}`,
               value: vehicle,
@@ -291,14 +297,19 @@ class Cli {
         },
       ])
       .then((answers) => {
-        console.log(answers.choices)
+        const chosenVehicle = answers.vehicleToTow
+// la trucka guey, 
+        const trucka:any = this.vehicles.find((vehicles) => vehicles.vin === this.selectedVehicleVin);
 
-        if (answers.choices.value === 'Truck'){
-          console.log('A truck cannot tow itself')
-          return;
-        } else{
-          
-        }
+       if (trucka.vin === chosenVehicle.vin){
+          console.log('A truck cannot tow itself');
+          this.performActions();
+        } else {
+          trucka.tow(chosenVehicle);
+          console.log(`The ${trucka.make} ${trucka.model} is towing the ${chosenVehicle.make}${chosenVehicle.model}`);
+          this.performActions();
+        } 
+
         // TODO: check if the selected vehicle is the truck
         // TODO: if it is, log that the truck cannot tow itself then perform actions on the truck to allow the user to select another action
         // TODO: if it is not, tow the selected vehicle then perform actions on the truck to allow the user to select another action
@@ -325,6 +336,7 @@ class Cli {
             'Reverse',
             'Select or create another vehicle',
             'Tow',
+            'Do a Wheelie!',
             'Exit',
           ],
         },
@@ -388,19 +400,15 @@ class Cli {
             }
           }
         } else if (answers.action === 'Tow'){
-          const theVehicle = this.vehicles;
+          this.findVehicleToTow();
+          return;
 
-          if (theVehicle instanceof Truck){
-             this.findVehicleToTow();
-             return;
-          } else {
-            return console.log(`Only a truck can tow!`)
-          }
         } else if (answers.action === 'Wheelie') {
           const theWheelicle = this.vehicles;
           if (theWheelicle instanceof Motorbike){
-            
-
+            theWheelicle.wheelie();
+          }else {
+            console.log('Only a motorcycle can do a wheelie');
           }
 
           
