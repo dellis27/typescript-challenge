@@ -403,8 +403,9 @@ class Cli {
           this.findVehicleToTow();
           return;
 
-        } else if (answers.action === 'Wheelie') {
-          const theWheelicle = this.vehicles;
+        } else if (answers.action === 'Do a Wheelie!') {
+          const theWheelicle = this.vehicles.find((vehicles)=> vehicles.vin === this.selectedVehicleVin);
+
           if (theWheelicle instanceof Motorbike){
             theWheelicle.wheelie();
           }else {
